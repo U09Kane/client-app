@@ -30,6 +30,7 @@ module.exports = {
   },
   rules: {
     'linebreak-style': 'off',
+    'react/prop-types': 'off', // using typescript so... no need?
     'prettier/prettier': [
       'error',
       {
@@ -38,4 +39,5 @@ module.exports = {
       },
     ],
   },
+
 };
