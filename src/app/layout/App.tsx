@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { List, Container } from 'semantic-ui-react';
+import { Container } from 'semantic-ui-react';
 
 import './App.css';
 import api from '../../axios';
@@ -16,6 +16,7 @@ const App: React.FC = () => {
       .then(({ data }) => setActivities(data))
       .catch(() => {});
   }, []);
+
   return (
     <div className="App">
       <Navbar />
