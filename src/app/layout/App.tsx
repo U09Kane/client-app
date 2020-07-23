@@ -11,8 +11,11 @@ const App: React.FC = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [selected, setSelected] = useState<Activity | null>(null);
 
+  const [isEditing, setEdit] = useState(false);
+
   const didSelectActivity = (id: string) => {
     setSelected(activities.filter(d => d.id === id)[0]);
+    setEdit(false);
   };
 
   useEffect(() => {
@@ -30,6 +33,8 @@ const App: React.FC = () => {
           activities={activities}
           setActivity={didSelectActivity}
           selectedActivity={selected}
+          editMode={isEditing}
+          setEditMode={setEdit}
         />
       </Container>
     </div>

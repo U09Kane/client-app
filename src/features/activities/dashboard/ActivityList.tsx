@@ -15,14 +15,14 @@ const activityList: React.FC<Props> = ({ activities, setActivity }) => {
         <Item.Group divided style={{ textAlign: 'left' }} key={activity.id}>
           <Item>
             <Item.Content>
-              <Item.Header as="a">Title</Item.Header>
-              <Item.Meta>02-28-1996</Item.Meta>
+              <Item.Header as="a">{activity.title}</Item.Header>
+              <Item.Meta>{activity.date}</Item.Meta>
               <Item.Description>
-                <div>A very descriptive description of a thing</div>
-                <div>City, Venue</div>
+                <div>{activity.description}</div>
+                <div>{activity.venue}</div>
               </Item.Description>
               <Item.Extra>
-                <Label basic content="Category" />
+                <Label basic content={activity.category} />
                 <Button
                   onClick={() => setActivity(activity.id)}
                   floated="right"

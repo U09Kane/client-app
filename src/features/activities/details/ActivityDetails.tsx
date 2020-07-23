@@ -5,9 +5,10 @@ import Activity from '../../../app/models/activity';
 
 interface Props {
   activity: Activity;
+  setEdit: (mode: boolean) => void;
 }
 
-const activityDetails: React.FC<Props> = ({ activity }) => {
+const activityDetails: React.FC<Props> = ({ activity, setEdit }) => {
   return (
     <Card fluid>
       <Image
@@ -24,8 +25,13 @@ const activityDetails: React.FC<Props> = ({ activity }) => {
       </Card.Content>
       <Card.Content extra>
         <Button.Group widths={2}>
-          <Button basic color="blue" content="Edit" />
-          <Button basic color="blue" content="Edit" />
+          <Button
+            onClick={() => setEdit(true)}
+            basic
+            color="blue"
+            content="Edit"
+          />
+          <Button basic color="grey" content="Delete" />
         </Button.Group>
       </Card.Content>
     </Card>

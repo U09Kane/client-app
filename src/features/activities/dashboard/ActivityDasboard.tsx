@@ -9,12 +9,16 @@ import ActivtyForm from '../form/ActivityForm';
 interface Props {
   activities: Activity[];
   selectedActivity: Activity | null;
+  editMode: boolean;
   setActivity: (id: string) => void;
+  setEditMode: (mode: boolean) => void;
 }
 
 const activityDashboard: React.FC<Props> = ({
   activities,
   setActivity,
+  editMode,
+  setEditMode,
   selectedActivity = null,
 }) => {
   return (
@@ -23,8 +27,10 @@ const activityDashboard: React.FC<Props> = ({
         <ActivityList activities={activities} setActivity={setActivity} />
       </Grid.Column>
       <Grid.Column width="6">
-        {selectedActivity && <ActivityDetails activity={selectedActivity} />}
-        <ActivtyForm />
+        {selectedActivity && !editMode && (
+          <ActivityDetails activity={selectedActivity} setEdit={setEditMode} />
+        )}
+        {editMode && <ActivtyForm />}
       </Grid.Column>
     </Grid>
   );
