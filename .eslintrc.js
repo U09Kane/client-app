@@ -34,6 +34,7 @@ module.exports = {
     'prettier/prettier': [
       'error',
       {
+        arrowParens: "avoid",
         singleQuote: true,
         endOfLine: 'auto',
       },

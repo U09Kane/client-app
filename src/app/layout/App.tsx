@@ -3,12 +3,17 @@ import { Container } from 'semantic-ui-react';
 
 import './App.css';
 import api from '../../axios';
-import Activity from './models/activity';
+import Activity from '../models/activity';
 import Navbar from '../../features/nav/Navbar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDasboard';
 
 const App: React.FC = () => {
   const [activities, setActivities] = useState<Activity[]>([]);
+  const [selected, setSelected] = useState<Activity | null>(null);
+
+  const didSelectActivity = (id: string) => {
+    setSelected(activities.filter(d => d.id === id)[0]);
+  };
 
   useEffect(() => {
     api
@@ -21,7 +26,11 @@ const App: React.FC = () => {
     <div className="App">
       <Navbar />
       <Container style={{ marginTop: '7em' }}>
-        <ActivityDashboard activities={activities} />
+        <ActivityDashboard
+          activities={activities}
+          setActivity={didSelectActivity}
+          selectedActivity={selected}
+        />
       </Container>
     </div>
   );
