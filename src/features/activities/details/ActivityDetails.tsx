@@ -6,9 +6,14 @@ import Activity from '../../../app/models/activity';
 interface Props {
   activity: Activity;
   setEdit: (mode: boolean) => void;
+  clearActivity: () => void;
 }
 
-const activityDetails: React.FC<Props> = ({ activity, setEdit }) => {
+const activityDetails: React.FC<Props> = ({
+  activity,
+  setEdit,
+  clearActivity,
+}) => {
   return (
     <Card fluid>
       <Image
@@ -31,7 +36,12 @@ const activityDetails: React.FC<Props> = ({ activity, setEdit }) => {
             color="blue"
             content="Edit"
           />
-          <Button basic color="grey" content="Delete" />
+          <Button
+            onClick={() => clearActivity()}
+            basic
+            color="grey"
+            content="Cancel"
+          />
         </Button.Group>
       </Card.Content>
     </Card>

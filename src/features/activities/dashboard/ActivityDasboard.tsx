@@ -10,7 +10,7 @@ interface Props {
   activities: Activity[];
   selectedActivity: Activity | null;
   editMode: boolean;
-  setActivity: (id: string) => void;
+  setActivity: (id: string | null) => void;
   setEditMode: (mode: boolean) => void;
 }
 
@@ -28,9 +28,18 @@ const activityDashboard: React.FC<Props> = ({
       </Grid.Column>
       <Grid.Column width="6">
         {selectedActivity && !editMode && (
-          <ActivityDetails activity={selectedActivity} setEdit={setEditMode} />
+          <ActivityDetails
+            activity={selectedActivity}
+            setEdit={setEditMode}
+            clearActivity={() => setActivity(null)}
+          />
         )}
-        {editMode && <ActivtyForm />}
+        {editMode && (
+          <ActivtyForm
+            selectedActivity={selectedActivity}
+            setEditMode={setEditMode}
+          />
+        )}
       </Grid.Column>
     </Grid>
   );

@@ -13,9 +13,18 @@ const App: React.FC = () => {
 
   const [isEditing, setEdit] = useState(false);
 
-  const didSelectActivity = (id: string) => {
-    setSelected(activities.filter(d => d.id === id)[0]);
+  const didSelectActivity = (id: string | null) => {
+    if (id === null) {
+      setSelected(null);
+    } else {
+      setSelected(activities.filter(d => d.id === id)[0]);
+    }
     setEdit(false);
+  };
+
+  const didEditNewActivity = () => {
+    setSelected(null);
+    setEdit(true);
   };
 
   useEffect(() => {
@@ -27,7 +36,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <Navbar />
+      <Navbar openCreateActivity={didEditNewActivity} />
       <Container style={{ marginTop: '7em' }}>
         <ActivityDashboard
           activities={activities}
