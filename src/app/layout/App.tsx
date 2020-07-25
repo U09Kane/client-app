@@ -30,7 +30,10 @@ const App: React.FC = () => {
   useEffect(() => {
     api
       .get<Activity[]>('/activities')
-      .then(({ data }) => setActivities(data))
+      .then(({ data }) => {
+        const truncated = data.map(d => ({ ...d, date: d.date.split('.')[0] }));
+        setActivities(truncated);
+      })
       .catch(() => {});
   }, []);
 

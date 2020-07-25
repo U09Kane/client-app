@@ -1,7 +1,6 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { Segment, Form, Button } from 'semantic-ui-react';
 import Activity from '../../../app/models/activity';
-import { cursorTo } from 'readline';
 
 interface Props {
   setEditMode: (mode: boolean) => void;
@@ -28,7 +27,6 @@ const ActivityForm: React.FC<Props> = ({ setEditMode, selectedActivity }) => {
     setActivity(d => ({ ...d, [name]: value }));
   };
 
-  const didSubmit = () => {};
   return (
     <Segment clearing>
       <Form>
@@ -55,7 +53,7 @@ const ActivityForm: React.FC<Props> = ({ setEditMode, selectedActivity }) => {
           value={activity.date}
           name="date"
           placeholder="Date"
-          type="date"
+          type="datetime-local"
         />
         <Form.Input
           value={activity.city}

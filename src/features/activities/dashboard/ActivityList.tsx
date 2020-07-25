@@ -29,6 +29,7 @@ const activityList: React.FC<Props> = ({ activities, setActivity }) => {
                   content="View"
                   color="blue"
                 />
+                <Button floated="right" content="Delete" color="red" />
               </Item.Extra>
             </Item.Content>
           </Item>
