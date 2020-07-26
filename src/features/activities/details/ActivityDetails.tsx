@@ -1,7 +1,8 @@
 import React from 'react';
 import { Card, Button, Image } from 'semantic-ui-react';
 
-import Activity from '../../../app/models/activity';
+import { Activity } from '../../../app/models';
+import img from '../../../assets/categories/drinks.jpg';
 
 interface Props {
   activity: Activity;
@@ -16,11 +17,7 @@ const activityDetails: React.FC<Props> = ({
 }) => {
   return (
     <Card fluid>
-      <Image
-        src={`/assets/categories${activity.category}`}
-        ui={false}
-        wrapped
-      />
+      <Image src={img} ui={false} wrapped />
       <Card.Content>
         <Card.Header>{activity.title}</Card.Header>
         <Card.Meta>

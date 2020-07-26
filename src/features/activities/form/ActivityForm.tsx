@@ -1,6 +1,6 @@
 import React, { useState, FormEvent } from 'react';
 import { Segment, Form, Button } from 'semantic-ui-react';
-import Activity from '../../../app/models/activity';
+import { Activity } from '../../../app/models';
 
 interface Props {
   setEditMode: (mode: boolean) => void;
@@ -26,6 +26,7 @@ const ActivityForm: React.FC<Props> = ({ setEditMode, selectedActivity }) => {
   }: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setActivity(d => ({ ...d, [name]: value }));
   };
+
 
   return (
     <Segment clearing>

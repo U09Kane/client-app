@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
 
-import Activity from '../../../app/models/activity';
+import { Activity } from '../../../app/models';
 import ActivityList from './ActivityList';
 import ActivityDetails from '../details/ActivityDetails';
 import ActivtyForm from '../form/ActivityForm';
