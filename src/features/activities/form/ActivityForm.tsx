@@ -27,7 +27,6 @@ const ActivityForm: React.FC<Props> = ({ setEditMode, selectedActivity }) => {
     setActivity(d => ({ ...d, [name]: value }));
   };
 
-
   return (
     <Segment clearing>
       <Form>
