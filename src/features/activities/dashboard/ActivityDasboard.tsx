@@ -13,6 +13,7 @@ interface Props {
   setActivity: (id: string | null) => void;
   setEditMode: (mode: boolean) => void;
   didSubmitCreate: (d: Activity) => void;
+  didDelete: (id: string) => void;
   isSubmitting: boolean;
 }
 
@@ -23,11 +24,17 @@ const activityDashboard: React.FC<Props> = ({
   setEditMode,
   selectedActivity = null,
   didSubmitCreate,
+  didDelete,
+  isSubmitting,
 }) => {
   return (
     <Grid>
       <Grid.Column width="10">
-        <ActivityList activities={activities} setActivity={setActivity} />
+        <ActivityList
+          activities={activities}
+          setActivity={setActivity}
+          didDelete={didDelete}
+        />
       </Grid.Column>
       <Grid.Column width="6">
         {selectedActivity && !editMode && (
@@ -43,6 +50,7 @@ const activityDashboard: React.FC<Props> = ({
             selectedActivity={selectedActivity}
             setEditMode={setEditMode}
             didSubmitCreate={didSubmitCreate}
+            isSubmitting={isSubmitting}
           />
         )}
       </Grid.Column>

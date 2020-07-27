@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Item, Button, Label, Segment } from 'semantic-ui-react';
 
 import { Activity } from '../../../app/models';
@@ -6,10 +6,28 @@ import { Activity } from '../../../app/models';
 interface Props {
   activities: Activity[];
   setActivity: (id: string) => void;
+  didDelete: (id: string) => void;
   isSubmitting?: boolean;
 }
 
-const activityList: React.FC<Props> = ({ activities, setActivity }) => {
+const ActivityList: React.FC<Props> = ({
+  activities,
+  setActivity,
+  isSubmitting,
+  didDelete,
+}) => {
+  const [deleteID, setDeleteID] = useState<string | null>(null);
+
+  const onDelete = (activity: Activity) => {
+    setDeleteID(activity.id);
+    didDelete(activity.id);
+  };
+
+  useEffect(() => {
+    if (!isSubmitting) {
+      setDeleteID(null);
+    }
+  }, [isSubmitting]);
   return (
     <Segment clearing>
       {activities.map(activity => (
@@ -30,7 +48,13 @@ const activityList: React.FC<Props> = ({ activities, setActivity }) => {
                   content="View"
                   color="blue"
                 />
-                <Button floated="right" content="Delete" color="red" />
+                <Button
+                  onClick={() => onDelete(activity)}
+                  loading={activity.id === deleteID}
+                  floated="right"
+                  content="Delete"
+                  color="red"
+                />
               </Item.Extra>
             </Item.Content>
           </Item>
@@ -40,4 +64,4 @@ const activityList: React.FC<Props> = ({ activities, setActivity }) => {
   );
 };
 
-export default activityList;
+export default ActivityList;

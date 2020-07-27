@@ -17,7 +17,7 @@ function updateActivity(activity: Activity): Promise<AxiosResponse> {
   return api.put(`/activities/${activity.id}`, activity);
 }
 
-function deleteActivity(id: number): Promise<AxiosResponse> {
+function deleteActivity(id: string): Promise<AxiosResponse> {
   return api.delete(`/activities/${id}`);
 }
 

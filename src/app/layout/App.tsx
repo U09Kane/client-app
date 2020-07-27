@@ -29,8 +29,17 @@ const App: React.FC = () => {
     setEdit(true);
   };
 
+  const didDeleteActivity = (id: string) => {
+    setSubmitting(true);
+    api.activity.delete(id).then(() => {
+      setSubmitting(false);
+      setActivities(arr => arr.filter(d => d.id !== id));
+      setSelected(null);
+    });
+  };
+
   const didCreateActivity = async (activity: Activity) => {
-    await setSubmitting(true);
+    setSubmitting(true);
     if (activity.id !== '') {
       await api.activity.update(activity);
       setActivities(curr =>
@@ -44,7 +53,7 @@ const App: React.FC = () => {
       setSelected(updated);
     }
     setEdit(false);
-    setSubmitting(false);
+    await setSubmitting(false);
   };
 
   useEffect(() => {
@@ -76,6 +85,7 @@ const App: React.FC = () => {
           setEditMode={setEdit}
           isSubmitting={isSubmitting}
           didSubmitCreate={didCreateActivity}
+          didDelete={didDeleteActivity}
         />
       </Container>
     </div>

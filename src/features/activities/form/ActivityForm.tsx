@@ -79,12 +79,11 @@ const ActivityForm: React.FC<Props> = ({
           loading={isSubmitting}
           floated="right"
           type="submit"
-          content="Create"
+          content={activity.id === '' ? 'Create' : 'Update'}
           positive
         />
         <Button
           onClick={() => setEditMode(false)}
-          loading={isSubmitting}
           floated="right"
           type="button"
           content="Cancel"
