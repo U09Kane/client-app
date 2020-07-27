@@ -1,16 +1,31 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { Activity } from './app/models';
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,
 });
 
-function listActivites(): Promise<Activity[]> {
+function getActivites(): Promise<Activity[]> {
   return api.get('/activities').then(({ data }) => data);
+}
+
+function createActivity(activity: Activity): Promise<AxiosResponse> {
+  return api.post('/activities', activity);
+}
+
+function updateActivity(activity: Activity): Promise<AxiosResponse> {
+  return api.put(`/activities/${activity.id}`, activity);
+}
+
+function deleteActivity(id: number): Promise<AxiosResponse> {
+  return api.delete(`/activities/${id}`);
 }
 
 export default {
   activity: {
-    getAll: listActivites,
+    getAll: getActivites,
+    create: createActivity,
+    update: updateActivity,
+    delete: deleteActivity,
   },
 };

@@ -6,6 +6,7 @@ import { Activity } from '../../../app/models';
 interface Props {
   activities: Activity[];
   setActivity: (id: string) => void;
+  isSubmitting?: boolean;
 }
 
 const activityList: React.FC<Props> = ({ activities, setActivity }) => {

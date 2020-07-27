@@ -12,6 +12,8 @@ interface Props {
   editMode: boolean;
   setActivity: (id: string | null) => void;
   setEditMode: (mode: boolean) => void;
+  didSubmitCreate: (d: Activity) => void;
+  isSubmitting: boolean;
 }
 
 const activityDashboard: React.FC<Props> = ({
@@ -20,6 +22,7 @@ const activityDashboard: React.FC<Props> = ({
   editMode,
   setEditMode,
   selectedActivity = null,
+  didSubmitCreate,
 }) => {
   return (
     <Grid>
@@ -39,6 +42,7 @@ const activityDashboard: React.FC<Props> = ({
             key={selectedActivity ? selectedActivity.id : '0'}
             selectedActivity={selectedActivity}
             setEditMode={setEditMode}
+            didSubmitCreate={didSubmitCreate}
           />
         )}
       </Grid.Column>

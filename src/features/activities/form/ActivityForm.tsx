@@ -4,7 +4,9 @@ import { Activity } from '../../../app/models';
 
 interface Props {
   setEditMode: (mode: boolean) => void;
+  didSubmitCreate: (d: Activity) => void;
   selectedActivity: Activity | null;
+  isSubmitting?: boolean;
 }
 
 const initial: Activity = {
@@ -17,7 +19,12 @@ const initial: Activity = {
   venue: '',
 };
 
-const ActivityForm: React.FC<Props> = ({ setEditMode, selectedActivity }) => {
+const ActivityForm: React.FC<Props> = ({
+  setEditMode,
+  didSubmitCreate,
+  selectedActivity,
+  isSubmitting,
+}) => {
   const [activity, setActivity] = useState<Activity>(
     selectedActivity || initial
   );
@@ -29,7 +36,7 @@ const ActivityForm: React.FC<Props> = ({ setEditMode, selectedActivity }) => {
 
   return (
     <Segment clearing>
-      <Form>
+      <Form onSubmit={() => didSubmitCreate(activity)}>
         <Form.Input
           value={activity.title}
           onChange={didChange}
@@ -51,6 +58,7 @@ const ActivityForm: React.FC<Props> = ({ setEditMode, selectedActivity }) => {
         />
         <Form.Input
           value={activity.date}
+          onChange={didChange}
           name="date"
           placeholder="Date"
           type="datetime-local"
@@ -67,9 +75,16 @@ const ActivityForm: React.FC<Props> = ({ setEditMode, selectedActivity }) => {
           name="venue"
           placeholder="Venue"
         />
-        <Button floated="right" positive type="submit" content="Create" />
+        <Button
+          loading={isSubmitting}
+          floated="right"
+          type="submit"
+          content="Create"
+          positive
+        />
         <Button
           onClick={() => setEditMode(false)}
+          loading={isSubmitting}
           floated="right"
           type="button"
           content="Cancel"

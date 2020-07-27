@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Dimmer, Loader } from 'semantic-ui-react';
+import { v4 as uuid } from 'uuid';
 
 import './App.css';
 import api from '../../axios';
@@ -12,6 +13,7 @@ const App: React.FC = () => {
   const [selected, setSelected] = useState<Activity | null>(null);
   const [isEditing, setEdit] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setSubmitting] = useState(false);
 
   const didSelectActivity = (id: string | null) => {
     if (id === null) {
@@ -25,6 +27,24 @@ const App: React.FC = () => {
   const didEditNewActivity = () => {
     setSelected(null);
     setEdit(true);
+  };
+
+  const didCreateActivity = async (activity: Activity) => {
+    await setSubmitting(true);
+    if (activity.id !== '') {
+      await api.activity.update(activity);
+      setActivities(curr =>
+        curr.map(d => (d.id === activity.id ? activity : d))
+      );
+      setSelected(activity);
+    } else {
+      const updated = { ...activity, id: uuid() };
+      await api.activity.create(updated);
+      setActivities(cur => [...cur, updated]);
+      setSelected(updated);
+    }
+    setEdit(false);
+    setSubmitting(false);
   };
 
   useEffect(() => {
@@ -54,6 +74,8 @@ const App: React.FC = () => {
           selectedActivity={selected}
           editMode={isEditing}
           setEditMode={setEdit}
+          isSubmitting={isSubmitting}
+          didSubmitCreate={didCreateActivity}
         />
       </Container>
     </div>
