@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Container, Dimmer, Loader } from 'semantic-ui-react';
 import { v4 as uuid } from 'uuid';
 
@@ -8,7 +9,10 @@ import { Activity } from '../models';
 import Navbar from '../../features/nav/Navbar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDasboard';
 
+import ActivityStore from '../../store/activity.store';
+
 const App: React.FC = () => {
+  const activityStore = useContext(ActivityStore);
   const [activities, setActivities] = useState<Activity[]>([]);
   const [selected, setSelected] = useState<Activity | null>(null);
   const [isEditing, setEdit] = useState(false);
@@ -22,11 +26,6 @@ const App: React.FC = () => {
       setSelected(activities.filter(d => d.id === id)[0]);
     }
     setEdit(false);
-  };
-
-  const didEditNewActivity = () => {
-    setSelected(null);
-    setEdit(true);
   };
 
   const didDeleteActivity = (id: string) => {
@@ -57,6 +56,7 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
+    activityStore.getActivites();
     api.activity
       .getAll()
       .then(data => {
@@ -65,7 +65,7 @@ const App: React.FC = () => {
       })
       .then(() => setLoading(false))
       .catch(() => {});
-  }, []);
+  }, [activityStore]);
 
   if (loading)
     return (
@@ -75,16 +75,12 @@ const App: React.FC = () => {
     );
   return (
     <div className="App">
-      <Navbar openCreateActivity={didEditNewActivity} />
+      <Navbar />
       <Container style={{ marginTop: '7em' }}>
         <ActivityDashboard
-          activities={activities}
           setActivity={didSelectActivity}
-          selectedActivity={selected}
-          editMode={isEditing}
           setEditMode={setEdit}
           isSubmitting={isSubmitting}
-          didSubmitCreate={didCreateActivity}
           didDelete={didDeleteActivity}
         />
       </Container>
@@ -92,4 +88,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default observer(App);

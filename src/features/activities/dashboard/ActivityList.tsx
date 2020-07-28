@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Item, Button, Label, Segment } from 'semantic-ui-react';
 
 import { Activity } from '../../../app/models';
+import ActivityStore from '../../../store/activity.store';
 
 interface Props {
-  activities: Activity[];
-  setActivity: (id: string) => void;
   didDelete: (id: string) => void;
   isSubmitting?: boolean;
 }
 
-const ActivityList: React.FC<Props> = ({
-  activities,
-  setActivity,
-  isSubmitting,
-  didDelete,
-}) => {
+const ActivityList: React.FC<Props> = ({ isSubmitting, didDelete }) => {
   const [deleteID, setDeleteID] = useState<string | null>(null);
+  const { activities, selectActivity, activitesByDate } = useContext(
+    ActivityStore
+  );
 
   const onDelete = (activity: Activity) => {
     setDeleteID(activity.id);
@@ -30,7 +27,7 @@ const ActivityList: React.FC<Props> = ({
   }, [isSubmitting]);
   return (
     <Segment clearing>
-      {activities.map(activity => (
+      {activitesByDate.map(activity => (
         <Item.Group divided style={{ textAlign: 'left' }} key={activity.id}>
           <Item>
             <Item.Content>
@@ -43,7 +40,7 @@ const ActivityList: React.FC<Props> = ({
               <Item.Extra>
                 <Label basic content={activity.category} />
                 <Button
-                  onClick={() => setActivity(activity.id)}
+                  onClick={() => selectActivity(activity.id)}
                   floated="right"
                   content="View"
                   color="blue"

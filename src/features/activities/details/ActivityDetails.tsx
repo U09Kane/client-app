@@ -1,29 +1,26 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { observer } from 'mobx-react-lite';
 import { Card, Button, Image } from 'semantic-ui-react';
 
-import { Activity } from '../../../app/models';
+import ActivityStore from '../../../store/activity.store';
 import img from '../../../assets/categories/drinks.jpg';
 
 interface Props {
-  activity: Activity;
   setEdit: (mode: boolean) => void;
   clearActivity: () => void;
 }
 
-const activityDetails: React.FC<Props> = ({
-  activity,
-  setEdit,
-  clearActivity,
-}) => {
+const ActivityDetails: React.FC<Props> = ({ setEdit, clearActivity }) => {
+  const { selected: activity } = useContext(ActivityStore);
   return (
     <Card fluid>
       <Image src={img} ui={false} wrapped />
       <Card.Content>
-        <Card.Header>{activity.title}</Card.Header>
+        <Card.Header>{activity?.title}</Card.Header>
         <Card.Meta>
-          <span>{activity.date}</span>
+          <span>{activity?.date}</span>
         </Card.Meta>
-        <Card.Description>{activity.description}</Card.Description>
+        <Card.Description>{activity?.description}</Card.Description>
       </Card.Content>
       <Card.Content extra>
         <Button.Group widths={2}>
@@ -45,4 +42,4 @@ const activityDetails: React.FC<Props> = ({
   );
 };
 
-export default activityDetails;
+export default observer(ActivityDetails);

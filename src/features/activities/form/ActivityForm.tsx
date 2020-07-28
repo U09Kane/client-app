@@ -2,10 +2,11 @@ import React, { useState, FormEvent } from 'react';
 import { Segment, Form, Button } from 'semantic-ui-react';
 import { Activity } from '../../../app/models';
 
+import ActivityStore from '../../../store/activity.store';
+
 interface Props {
+  didSubmitCreate: (activity: Activity) => void;
   setEditMode: (mode: boolean) => void;
-  didSubmitCreate: (d: Activity) => void;
-  selectedActivity: Activity | null;
   isSubmitting?: boolean;
 }
 
@@ -19,15 +20,10 @@ const initial: Activity = {
   venue: '',
 };
 
-const ActivityForm: React.FC<Props> = ({
-  setEditMode,
-  didSubmitCreate,
-  selectedActivity,
-  isSubmitting,
-}) => {
-  const [activity, setActivity] = useState<Activity>(
-    selectedActivity || initial
-  );
+const ActivityForm: React.FC<Props> = ({ setEditMode, isSubmitting }) => {
+  const { createActivity, selected } = React.useContext(ActivityStore);
+
+  const [activity, setActivity] = useState<Activity>(selected || initial);
   const didChange = ({
     currentTarget: { name, value },
   }: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -36,7 +32,7 @@ const ActivityForm: React.FC<Props> = ({
 
   return (
     <Segment clearing>
-      <Form onSubmit={() => didSubmitCreate(activity)}>
+      <Form onSubmit={() => createActivity(activity)}>
         <Form.Input
           value={activity.title}
           onChange={didChange}
