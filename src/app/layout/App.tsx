@@ -3,8 +3,8 @@ import { observer } from 'mobx-react-lite';
 import { Container, Dimmer, Loader } from 'semantic-ui-react';
 
 import './App.css';
-import Navbar from '../../features/nav/Navbar';
-import ActivityDashboard from '../../features/activities/dashboard/ActivityDasboard';
+import Navbar from '../../components/nav/Navbar';
+import ActivityDashboard from '../../components/activities/dashboard/ActivityDasboard';
 
 import ActivityStore from '../../store/activity.store';
 
