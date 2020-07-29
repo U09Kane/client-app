@@ -1,7 +1,8 @@
 import React, { useState, FormEvent } from 'react';
 import { Segment, Form, Button } from 'semantic-ui-react';
-import { Activity } from '../../../app/models';
+import { observer } from 'mobx-react-lite';
 
+import { Activity } from '../../../app/models';
 import ActivityStore from '../../../store/activity.store';
 
 interface Props {
@@ -89,4 +90,4 @@ const ActivityForm: React.FC<Props> = ({ setEditMode }) => {
   );
 };
 
-export default ActivityForm;
+export default observer(ActivityForm);

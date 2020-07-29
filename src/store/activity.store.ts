@@ -1,13 +1,14 @@
 import { createContext } from 'react';
-import { observable, action, computed } from 'mobx';
+import { observable, action, computed, configure, runInAction } from 'mobx';
 import { v4 as uuid } from 'uuid';
 
 import { Activity } from '../app/models';
 import api from '../axios';
 
+configure({ enforceActions: 'always' });
+
 class ActivityStore {
   @observable activitiesMap: Map<string, Activity> = new Map();
-  // @observable activities: Activity[] = [];
 
   @observable selected: Activity | undefined;
 
@@ -19,12 +20,14 @@ class ActivityStore {
   getActivites = async () => {
     try {
       const activities = await api.activity.getAll();
-      const truncated = activities.map(d => ({
-        ...d,
-        date: d.date.split('.')[0],
-      }));
-      truncated.forEach(d => {
-        this.activitiesMap.set(d.id, d);
+      runInAction(() => {
+        const truncated = activities.map(d => ({
+          ...d,
+          date: d.date.split('.')[0],
+        }));
+        truncated.forEach(d => {
+          this.activitiesMap.set(d.id, d);
+        });
       });
     } catch (err) {
       console.error(err);
@@ -53,28 +56,36 @@ class ActivityStore {
     this.isSubmitting = true;
     if (activity.id !== '') {
       await api.activity.update(activity);
-      this.activitiesMap.set(activity.id, activity);
-      this.selected = activity;
+      runInAction('update activity', () => {
+        this.activitiesMap.set(activity.id, activity);
+        this.selected = activity;
+      });
     } else {
       const updated = { ...activity, id: uuid() };
       await api.activity.create(updated);
-      this.activitiesMap.set(updated.id, updated);
-      this.selected = updated;
+      runInAction('create activity', () => {
+        this.activitiesMap.set(updated.id, updated);
+        this.selected = updated;
+      });
     }
-    this.isEditing = false;
-    this.isSubmitting = false;
+    runInAction(() => {
+      this.isEditing = false;
+      this.isSubmitting = false;
+    });
   };
 
   @action
   deleteActivity = async (id: string) => {
     this.isSubmitting = true;
     await api.activity.delete(id);
-    if (this.selected && this.selected.id === id) {
-      this.selected = undefined;
-      this.setEditMode(false);
-    }
-    this.activitiesMap.delete(id);
-    this.isSubmitting = false;
+    runInAction('delete activity', () => {
+      if (this.selected && this.selected.id === id) {
+        this.selected = undefined;
+        this.setEditMode(false);
+      }
+      this.activitiesMap.delete(id);
+      this.isSubmitting = false;
+    });
   };
 
   @action
