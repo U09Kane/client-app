@@ -6,7 +6,8 @@ import { Activity } from '../app/models';
 import api from '../axios';
 
 class ActivityStore {
-  @observable activities: Activity[] = [];
+  @observable activitiesMap: Map<string, Activity> = new Map();
+  // @observable activities: Activity[] = [];
 
   @observable selected: Activity | undefined;
 
@@ -22,7 +23,9 @@ class ActivityStore {
         ...d,
         date: d.date.split('.')[0],
       }));
-      this.activities = truncated;
+      truncated.forEach(d => {
+        this.activitiesMap.set(d.id, d);
+      });
     } catch (err) {
       console.error(err);
     }
@@ -30,7 +33,18 @@ class ActivityStore {
 
   @action
   selectActivity = (id: string) => {
-    this.selected = this.activities.find(d => d.id === id);
+    this.selected = this.activitiesMap.get(id);
+    this.isEditing = false;
+  };
+
+  @action
+  setEditMode = (val: boolean) => {
+    this.isEditing = val;
+  };
+
+  @action
+  clearSelected = () => {
+    this.selected = undefined;
     this.isEditing = false;
   };
 
@@ -39,17 +53,27 @@ class ActivityStore {
     this.isSubmitting = true;
     if (activity.id !== '') {
       await api.activity.update(activity);
-      this.activities = this.activities.map(d =>
-        d.id === activity.id ? activity : d
-      );
+      this.activitiesMap.set(activity.id, activity);
       this.selected = activity;
     } else {
       const updated = { ...activity, id: uuid() };
       await api.activity.create(updated);
-      this.activities.push(updated);
+      this.activitiesMap.set(updated.id, updated);
       this.selected = updated;
     }
     this.isEditing = false;
+    this.isSubmitting = false;
+  };
+
+  @action
+  deleteActivity = async (id: string) => {
+    this.isSubmitting = true;
+    await api.activity.delete(id);
+    if (this.selected && this.selected.id === id) {
+      this.selected = undefined;
+      this.setEditMode(false);
+    }
+    this.activitiesMap.delete(id);
     this.isSubmitting = false;
   };
 
@@ -59,12 +83,17 @@ class ActivityStore {
     this.isEditing = true;
   };
 
-  @computed get activitesByDate() {
-    console.log('hello');
-    return this.activities.sort(
+  @computed
+  get activitesByDate() {
+    return Array.from(this.activitiesMap.values()).sort(
       (l, r) => Date.parse(l.date) - Date.parse(r.date)
     );
-  };
+  }
+
+  @computed
+  get activities() {
+    return this.activitiesMap.values();
+  }
 }
 
 export default createContext(new ActivityStore());

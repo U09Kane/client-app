@@ -6,8 +6,7 @@ import ActivityStore from '../../../store/activity.store';
 
 interface Props {
   didSubmitCreate: (activity: Activity) => void;
-  setEditMode: (mode: boolean) => void;
-  isSubmitting?: boolean;
+  setEditMode: () => void;
 }
 
 const initial: Activity = {
@@ -20,9 +19,10 @@ const initial: Activity = {
   venue: '',
 };
 
-const ActivityForm: React.FC<Props> = ({ setEditMode, isSubmitting }) => {
-  const { createActivity, selected } = React.useContext(ActivityStore);
-
+const ActivityForm: React.FC<Props> = ({ setEditMode }) => {
+  const { createActivity, selected, isSubmitting } = React.useContext(
+    ActivityStore
+  );
   const [activity, setActivity] = useState<Activity>(selected || initial);
   const didChange = ({
     currentTarget: { name, value },
@@ -79,7 +79,7 @@ const ActivityForm: React.FC<Props> = ({ setEditMode, isSubmitting }) => {
           positive
         />
         <Button
-          onClick={() => setEditMode(false)}
+          onClick={() => setEditMode()}
           floated="right"
           type="button"
           content="Cancel"

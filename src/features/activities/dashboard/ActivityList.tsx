@@ -1,23 +1,22 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Item, Button, Label, Segment } from 'semantic-ui-react';
+import { observer } from 'mobx-react-lite';
 
 import { Activity } from '../../../app/models';
 import ActivityStore from '../../../store/activity.store';
 
-interface Props {
-  didDelete: (id: string) => void;
-  isSubmitting?: boolean;
-}
-
-const ActivityList: React.FC<Props> = ({ isSubmitting, didDelete }) => {
+const ActivityList: React.FC = () => {
   const [deleteID, setDeleteID] = useState<string | null>(null);
-  const { activities, selectActivity, activitesByDate } = useContext(
-    ActivityStore
-  );
+  const {
+    selectActivity,
+    activitesByDate,
+    isSubmitting,
+    deleteActivity,
+  } = useContext(ActivityStore);
 
   const onDelete = (activity: Activity) => {
     setDeleteID(activity.id);
-    didDelete(activity.id);
+    deleteActivity(activity.id);
   };
 
   useEffect(() => {
@@ -61,4 +60,4 @@ const ActivityList: React.FC<Props> = ({ isSubmitting, didDelete }) => {
   );
 };
 
-export default ActivityList;
+export default observer(ActivityList);
