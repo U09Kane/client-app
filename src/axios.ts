@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { Activity } from './app/models';
+import { Activity } from './app/types';
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,

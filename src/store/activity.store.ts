@@ -2,7 +2,7 @@ import { createContext } from 'react';
 import { observable, action, computed, configure, runInAction } from 'mobx';
 import { v4 as uuid } from 'uuid';
 
-import { Activity } from '../app/models';
+import { Activity } from '../app/types';
 import api from '../axios';
 
 configure({ enforceActions: 'always' });

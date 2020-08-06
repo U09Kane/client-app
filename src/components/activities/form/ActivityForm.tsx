@@ -2,7 +2,7 @@ import React, { useState, FormEvent } from 'react';
 import { Segment, Form, Button } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 
-import { Activity } from '../../../app/models';
+import { Activity } from '../../../app/types';
 import ActivityStore from '../../../store/activity.store';
 
 interface Props {

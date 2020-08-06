@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Item, Button, Label, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 
-import { Activity } from '../../../app/models';
+import { Activity } from '../../../app/types';
 import ActivityStore from '../../../store/activity.store';
 
 const ActivityList: React.FC = () => {
