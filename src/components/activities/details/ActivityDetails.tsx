@@ -1,17 +1,28 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { RouteComponentProps, Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 import { Card, Button, Image } from 'semantic-ui-react';
 
 import ActivityStore from '../../../store/activity.store';
 import img from '../../../assets/categories/drinks.jpg';
 
-interface Props {
-  setEdit: (mode: boolean) => void;
-  clearActivity: () => void;
+interface RouteProps {
+  id: string;
 }
 
-const ActivityDetails: React.FC<Props> = ({ setEdit, clearActivity }) => {
-  const { selected: activity } = useContext(ActivityStore);
+const ActivityDetails: React.FC<RouteComponentProps<RouteProps>> = ({
+  match,
+  history,
+}) => {
+  const {
+    selected: activity,
+    clearSelected,
+    setEditMode,
+    getActivityByID,
+  } = useContext(ActivityStore);
+  useEffect(() => {
+    getActivityByID(match.params.id);
+  }, [getActivityByID, match.params.id]);
   return (
     <Card fluid>
       <Image src={img} ui={false} wrapped />
@@ -25,13 +36,15 @@ const ActivityDetails: React.FC<Props> = ({ setEdit, clearActivity }) => {
       <Card.Content extra>
         <Button.Group widths={2}>
           <Button
-            onClick={() => setEdit(true)}
+            as={Link}
+            to={`/manage/${activity?.id}`}
+            onClick={() => setEditMode(true)}
             basic
             color="blue"
             content="Edit"
           />
           <Button
-            onClick={() => clearActivity()}
+            onClick={() => history.push('/activities')}
             basic
             color="grey"
             content="Cancel"

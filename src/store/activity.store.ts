@@ -35,6 +35,23 @@ class ActivityStore {
   };
 
   @action
+  getActivityByID = async (id: string) => {
+    let activity = this.activitiesMap.get(id);
+    if (activity) {
+      this.selected = activity;
+    } else {
+      try {
+        activity = await api.activity.getOne(id);
+        runInAction('retrieving activity', () => {
+          this.selected = activity;
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
+  @action
   selectActivity = (id: string) => {
     this.selected = this.activitiesMap.get(id);
     this.isEditing = false;

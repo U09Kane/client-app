@@ -21,19 +21,15 @@ const ActivityDashboard: React.FC = () => {
         <ActivityList />
       </Grid.Column>
       <Grid.Column width="6">
-        {selected && !isEditing && (
-          <ActivityDetails
-            setEdit={setEditMode}
-            clearActivity={() => clearSelected()}
-          />
-        )}
+        <h2>Placeholder</h2>
+        {/* {selected && !isEditing && <ActivityDetails />}
         {isEditing && (
           <ActivtyForm
             key={selected ? selected.id : '0'}
             setEditMode={() => setEditMode(false)}
             didSubmitCreate={createActivity}
           />
-        )}
+        )} */}
       </Grid.Column>
     </Grid>
   );

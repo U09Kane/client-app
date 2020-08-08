@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import { Activity } from '../../../app/types';
 import ActivityStore from '../../../store/activity.store';
+import { Link } from 'react-router-dom';
 
 const ActivityList: React.FC = () => {
   const [deleteID, setDeleteID] = useState<string | null>(null);
@@ -39,7 +40,8 @@ const ActivityList: React.FC = () => {
               <Item.Extra>
                 <Label basic content={activity.category} />
                 <Button
-                  onClick={() => selectActivity(activity.id)}
+                  as={Link}
+                  to={`/activities/${activity.id}`}
                   floated="right"
                   content="View"
                   color="blue"

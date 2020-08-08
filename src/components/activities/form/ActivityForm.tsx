@@ -1,13 +1,13 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
+import { BrowserRouterProps, RouteComponentProps } from 'react-router-dom';
 import { Segment, Form, Button } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 
 import { Activity } from '../../../app/types';
 import ActivityStore from '../../../store/activity.store';
 
-interface Props {
-  didSubmitCreate: (activity: Activity) => void;
-  setEditMode: () => void;
+interface RouteProps {
+  id: string;
 }
 
 const initial: Activity = {
@@ -20,11 +20,25 @@ const initial: Activity = {
   venue: '',
 };
 
-const ActivityForm: React.FC<Props> = ({ setEditMode }) => {
-  const { createActivity, selected, isSubmitting } = React.useContext(
-    ActivityStore
-  );
+const ActivityForm: React.FC<RouteComponentProps<RouteProps>> = ({
+  match: { params },
+}) => {
+  const {
+    createActivity,
+    selected,
+    isSubmitting,
+    getActivityByID,
+  } = React.useContext(ActivityStore);
   const [activity, setActivity] = useState<Activity>(selected || initial);
+  useEffect(() => {
+    if (params.id) {
+      getActivityByID(params.id).then(() =>
+        selected ? setActivity(selected) : setActivity(initial)
+      );
+    } else {
+      setActivity(initial);
+    }
+  }, [params.id, getActivityByID, selected]);
   const didChange = ({
     currentTarget: { name, value },
   }: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -80,7 +94,7 @@ const ActivityForm: React.FC<Props> = ({ setEditMode }) => {
           positive
         />
         <Button
-          onClick={() => setEditMode()}
+          onClick={() => {}}
           floated="right"
           type="button"
           content="Cancel"
