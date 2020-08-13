@@ -1,5 +1,5 @@
 import React, { useState, FormEvent, useEffect } from 'react';
-import { BrowserRouterProps, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { Segment, Form, Button } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 
@@ -19,9 +19,12 @@ const initial: Activity = {
   city: '',
   venue: '',
 };
+// TODO: This component renders 6-8 times when navigating directly to the
+// /activities/{id} page.
 
 const ActivityForm: React.FC<RouteComponentProps<RouteProps>> = ({
   match: { params },
+  history,
 }) => {
   const {
     createActivity,
@@ -30,24 +33,37 @@ const ActivityForm: React.FC<RouteComponentProps<RouteProps>> = ({
     getActivityByID,
   } = React.useContext(ActivityStore);
   const [activity, setActivity] = useState<Activity>(selected || initial);
+
   useEffect(() => {
-    if (params.id) {
+    let isMounted = true;
+    if (params.id && isMounted) {
       getActivityByID(params.id).then(() =>
         selected ? setActivity(selected) : setActivity(initial)
       );
     } else {
       setActivity(initial);
     }
+    return () => {
+      isMounted = false;
+    };
   }, [params.id, getActivityByID, selected]);
+
+  /* change handler for events on each form element */
   const didChange = ({
     currentTarget: { name, value },
   }: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setActivity(d => ({ ...d, [name]: value }));
   };
+  console.log('hi');
+  /* handles submit event on the form */
+  const didSubmit = () =>
+    createActivity(activity).then(() =>
+      history.push(`/activities/${activity.id}`)
+    );
 
   return (
     <Segment clearing>
-      <Form onSubmit={() => createActivity(activity)}>
+      <Form onSubmit={didSubmit}>
         <Form.Input
           value={activity.title}
           onChange={didChange}

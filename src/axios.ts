@@ -1,6 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
 import { Activity } from './app/types';
-import { assertPropertyConfigurable } from 'mobx/lib/internal';
 
 const api = axios.create({
   baseURL: process.env.REACT_APP_API_BASE_URL,

@@ -14,12 +14,9 @@ const ActivityDetails: React.FC<RouteComponentProps<RouteProps>> = ({
   match,
   history,
 }) => {
-  const {
-    selected: activity,
-    clearSelected,
-    setEditMode,
-    getActivityByID,
-  } = useContext(ActivityStore);
+  const { selected: activity, setEditMode, getActivityByID } = useContext(
+    ActivityStore
+  );
   useEffect(() => {
     getActivityByID(match.params.id);
   }, [getActivityByID, match.params.id]);

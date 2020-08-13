@@ -1,19 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Item, Button, Label, Segment } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 
 import { Activity } from '../../../app/types';
 import ActivityStore from '../../../store/activity.store';
-import { Link } from 'react-router-dom';
 
 const ActivityList: React.FC = () => {
   const [deleteID, setDeleteID] = useState<string | null>(null);
-  const {
-    selectActivity,
-    activitesByDate,
-    isSubmitting,
-    deleteActivity,
-  } = useContext(ActivityStore);
+  const { activitesByDate, isSubmitting, deleteActivity } = useContext(
+    ActivityStore
+  );
 
   const onDelete = (activity: Activity) => {
     setDeleteID(activity.id);
